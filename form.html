@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+   <script type="text/javascript" src="jquery-3.7.1.js"></script>
+        <script type="text/javascript" src="script.js"></script>
+  <title>Регистрация</title>
+  <style>
+    body{
+      font-family: Tahoma, Arial, sans-serif;
+      background: #f2f4f8;
+      margin: 40px;
+      color: #111;
+    }
+    .window {
+      width: 520px;
+      border: 1px solid #666;
+      background: #fff;
+      box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+      margin: 0 auto;
+    }
+    .titlebar{
+      background: linear-gradient(#2b6cc4,#1f4ea0);
+      color: #fff;
+      padding: 8px 12px;
+      font-weight: bold;
+      border-bottom: 1px solid #274a86;
+    }
+    .content{
+      padding: 18px;
+    }
+    .hint{
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+    .form-row{
+      display:flex;
+      margin:8px 0;
+      align-items: center;
+    }
+    .form-row label{
+      width:170px;
+      font-size:14px;
+    }
+    .form-row input[type="text"],
+    .form-row input[type="tel"],
+    .form-row input[type="email"]{
+      flex:1;
+      padding:6px 8px;
+      border:1px solid #9aa3b2;
+      border-radius:2px;
+      font-size:14px;
+    }
+    .required { color: #c00; margin-right:6px; }
+    .buttons {
+      margin-top: 16px;
+      display:flex;
+      gap:10px;
+    }
+    button{
+      padding:6px 14px;
+      border:1px solid #888;
+      background:#e9eef8;
+      cursor:pointer;
+      border-radius:3px;
+      font-size:14px;
+    }
+    button[type="submit"]{
+      background:#dfeaff;
+      font-weight:600;
+    }
+    .note{
+      margin-top:12px;
+      font-size:12px;
+      color:#555;
+    }
+  </style>
+</head>
+<body>
+  <div class="window" role="main" aria-labelledby="winTitle">
+    <div class="titlebar" id="winTitle">Регистрация - Windows Internet Explorer</div>
+    <div class="content">
+      <div class="hint">Для регистрации необходимо указать ваши персональные данные</div>
+
+      <form onSubmit = "CheckData(); return false;"
+      id="regForm" action="/submit" method="post"
+            onsubmit="CheckData(); return false;">
+        <div class="form-row">
+          <label for="uname"><span class="required">*</span>Имя</label>
+          <input id="uname" name="uname" type="text" maxlength="100" />
+        </div>
+
+        <div class="form-row">
+          <label for="org">Организация (компания)</label>
+          <input id="org" name="org" type="text" maxlength="150" />
+        </div>
+
+        <div class="form-row">
+          <label for="phone">Телефон</label>
+          <input id="phone" name="phone" type="tel" maxlength="30" placeholder="+7 (___) ___-__-__" />
+        </div>
+
+        <div class="form-row">
+          <label for="email"><span class="required">*</span>Адрес эл.почты</label>
+          <input id="email" name="email" type="email" maxlength="254" />
+        </div>
+
+        <div class="buttons">
+          <button type="submit">Отправить</button>
+          <button type="reset">Очистить</button>
+        </div>
+
+        <div class="note"><span class="required">*</span>Поля обязательные для заполнения</div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Проверка формы перед отправкой
+    function CheckData() {
+      var form = document.getElementById('regForm');
+      var uname = document.getElementById('uname').value.trim();
+      var email = document.getElementById('email').value.trim();
+      var phone = document.getElementById('phone').value.trim();
+
+      // Проверка обязательных полей
+      if (uname.length === 0) {
+        alert('Пожалуйста, введите ваше имя (обязательное поле).');
+        document.getElementById('uname').focus();
+        return false;
+      }
+      if (email.length === 0) {
+        alert('Пожалуйста, введите адрес электронной почты (обязательное поле).');
+        document.getElementById('email').focus();
+        return false;
+      }
+
+      // Простейшая валидация e-mail — шаблон на основе регулярного выражения
+      // (в учебных задачах достаточно общей проверки)
+      var patt = new RegExp("^[\\w\\.-]+@[A-Za-z0-9\\.-]+\\.[A-Za-z]{2,6}$");
+      var validEmail = patt.test(email);
+      if (!validEmail) {
+        alert('Пожалуйста, введите корректный адрес электронной почты.');
+        document.getElementById('email').focus();
+        return false;
+      }
+
+      // Дополнительно можно проверить телефон (необязательно)
+      if (phone.length > 0) {
+        // простая проверка: цифры, пробелы, плюсы, скобки и дефисы разрешены
+        var phonePatt = /^[0-9\+\-\s\(\)]{6,30}$/;
+        if (!phonePatt.test(phone)) {
+          alert('Пожалуйста, введите корректный номер телефона или оставьте поле пустым.');
+          document.getElementById('phone').focus();
+          return false;
+        }
+      }
+
+      // Подтверждение отправки — как в примере из задания
+      var ans = confirm('Вы уверены, что хотите отправить введенные данные ?');
+      if (ans) {
+        // реальная отправка формы
+        form.submit();
+      }
+      return false;
+    }
+  </script>
+</body>
+</html>
